@@ -26,6 +26,10 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       _onMovieSearch,
       transformer: throttleDroppable(throttleDuration),
     );
+    on<MovieRefresh>(
+      _onMovieRefresh,
+      transformer: throttleDroppable(throttleDuration),
+    );
   }
 
   Future<void> _onMovieSearch(
@@ -54,6 +58,19 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
               hasReachedMax: false,
               query: state.query,
             ));
+    } catch (e) {
+      emit(state.copyWith(status: MovieStatus.failure));
+    }
+  }
+
+  Future<void> _onMovieRefresh(
+    MovieRefresh event,
+    Emitter<MovieState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(
+        status: MovieStatus.initial,
+      ));
     } catch (e) {
       emit(state.copyWith(status: MovieStatus.failure));
     }

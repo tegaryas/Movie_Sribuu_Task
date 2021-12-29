@@ -53,6 +53,11 @@ class _ListMovieState extends State<ListMovie>
     super.didChangeDependencies();
   }
 
+  Future<void> _onRefresh() async {
+    context.read<MovieBloc>().add(MovieRefresh());
+    context.read<MovieBloc>().add(MovieFetched());
+  }
+
   void _changeView() {
     setState(() {
       isChangeView = !isChangeView;
@@ -108,74 +113,80 @@ class _ListMovieState extends State<ListMovie>
                 return const Center(child: Text('no movies'));
               }
               return isChangeView
-                  ? ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      itemBuilder: (context, index) {
-                        return index >= state.movies.length
-                            ? const BottomLoader()
-                            : GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailMoviePage(
-                                        movie: state.movies[index],
-                                        prevcontext: context,
+                  ? RefreshIndicator(
+                      onRefresh: _onRefresh,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return index >= state.movies.length
+                              ? const BottomLoader()
+                              : GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailMoviePage(
+                                          movie: state.movies[index],
+                                          prevcontext: context,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: _buildMovieList(
-                                    movie: state.movies[index]));
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          height: 30,
-                        );
-                      },
-                      itemCount: state.hasReachedMax
-                          ? state.movies.length
-                          : state.movies.length + 1,
-                      controller: _scrollController,
+                                    );
+                                  },
+                                  child: _buildMovieList(
+                                      movie: state.movies[index]));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 30,
+                          );
+                        },
+                        itemCount: state.hasReachedMax
+                            ? state.movies.length
+                            : state.movies.length + 1,
+                        controller: _scrollController,
+                      ),
                     )
-                  : GridView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      controller: _scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 3 / 5,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                      ),
-                      itemCount: state.hasReachedMax
-                          ? state.movies.length
-                          : state.movies.length + 1,
-                      itemBuilder: (BuildContext ctx, index) {
-                        return index >= state.movies.length
-                            ? Container()
-                            : GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailMoviePage(
-                                        movie: state.movies[index],
-                                        prevcontext: context,
+                  : RefreshIndicator(
+                      onRefresh: _onRefresh,
+                      child: GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        controller: _scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 3 / 5,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                        ),
+                        itemCount: state.hasReachedMax
+                            ? state.movies.length
+                            : state.movies.length + 1,
+                        itemBuilder: (BuildContext ctx, index) {
+                          return index >= state.movies.length
+                              ? Container()
+                              : GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailMoviePage(
+                                          movie: state.movies[index],
+                                          prevcontext: context,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child:
-                                    _buildMovieGrid(movie: state.movies[index]),
-                              );
-                      },
+                                    );
+                                  },
+                                  child: _buildMovieGrid(
+                                      movie: state.movies[index]),
+                                );
+                        },
+                      ),
                     );
             default:
               return const Center(child: CircularProgressIndicator());

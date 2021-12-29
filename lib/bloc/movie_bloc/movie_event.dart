@@ -8,3 +8,5 @@ abstract class MovieEvent extends Equatable {
 }
 
 class MovieFetched extends MovieEvent {}
+
+class MovieRefresh extends MovieEvent {}
