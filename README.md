@@ -4,6 +4,6 @@ Ini merupakan repository yang ditujukan untuk memenuhi persyaratan Front-End Dev
 
 Dimana pada aplikasi ini menggunakan Bloc State Management dan menggunakan Moor sebagai local database.
 
-Link buat APK : t.ly/wOfU
+Link buat APK : <t.ly/wOfU>
 
 ## Screenshot
