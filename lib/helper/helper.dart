@@ -4,12 +4,4 @@ class Helper {
     List<String> parts = d.toString().split(':');
     return '${parts[0]} Jam ${parts[1]} Menit';
   }
-
-  // static Future<void> launchUrl(String url) async {
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
 }

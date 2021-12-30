@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_sribuu_task/bloc/favorite_bloc/favorite_bloc.dart';
 import 'package:movie_sribuu_task/bloc/movie_bloc/movie_bloc.dart';
+import 'package:movie_sribuu_task/bloc/search_bloc/search_cubit.dart';
 import 'package:movie_sribuu_task/data/localdb/favorite_db.dart';
 import 'package:movie_sribuu_task/model/movie_model.dart';
 import 'package:movie_sribuu_task/ui/movie_detail_page.dart';
+import 'package:movie_sribuu_task/ui/movie_search_page.dart';
 
 class MoviePage extends StatelessWidget {
   const MoviePage({Key? key}) : super(key: key);
@@ -98,6 +100,27 @@ class _ListMovieState extends State<ListMovie>
             onPressed: _changeView,
             icon: Icon(
               isChangeView ? Icons.grid_view : Icons.list_alt,
+              size: 24,
+            ),
+          ),
+          IconButton(
+            padding: const EdgeInsets.only(
+              right: 20,
+              left: 8,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider<SearchCubit>(
+                    create: (context) => SearchCubit(),
+                    child: const MovieSearchPage(),
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.search,
               size: 24,
             ),
           )
